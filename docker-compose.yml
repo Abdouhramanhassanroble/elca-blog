@@ -1,0 +1,29 @@
+services:
+  drupal:
+    image: drupal:10-apache
+    ports:
+      - "8080:80"
+    volumes:
+      - drupal_data:/var/www/html
+      - ./themes/custom:/var/www/html/themes/custom
+      - ./modules/custom:/var/www/html/modules/custom
+    environment:
+      - PHP_INI_SCAN_DIR=/usr/local/etc/php/conf.d
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: drupal
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  drupal_data:
+  db_data:
