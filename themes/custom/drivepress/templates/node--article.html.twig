@@ -1,0 +1,12 @@
+<article class="article-card">
+  <div class="article-card__body">
+    <div class="article-card__tag">Article</div>
+    <h2 class="article-card__title">
+      <a href="{{ url }}">{{ label }}</a>
+    </h2>
+    <div class="article-card__excerpt">
+     {{ content.body|render|striptags|replace({'&nbsp;': ' '})|slice(0, 150) }}...
+    </div>
+    <a href="{{ url }}" class="article-card__link">Lire la suite →</a>
+  </div>
+</article>
