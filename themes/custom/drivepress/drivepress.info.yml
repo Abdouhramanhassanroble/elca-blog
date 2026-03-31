@@ -1,0 +1,11 @@
+name: DrivePress
+type: theme
+description: 'Thème custom responsive pour DrivePress'
+core_version_requirement: ^10
+base theme: false
+
+regions:
+  header: Header
+  primary_menu: 'Menu principal'
+  content: Contenu
+  footer: Footer
