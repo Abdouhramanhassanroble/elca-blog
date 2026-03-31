@@ -1,0 +1,13 @@
+<article class="article-full">
+  <header class="article-full__header">
+    <div class="article-full__tag">Article</div>
+    <h1 class="article-full__title">{{ label }}</h1>
+    <div class="article-full__meta">
+      Publié le {{ node.createdtime|date('d/m/Y') }}
+    </div>
+  </header>
+  <div class="article-full__body">
+    {{ content.body }}
+  </div>
+  <a href="/" class="article-full__back">← Retour aux articles</a>
+</article>
