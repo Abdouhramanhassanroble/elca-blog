@@ -12,3 +12,61 @@ function drivepress_preprocess_node(&$variables) {
   $clean = preg_replace('/\s+/', ' ', $clean);
   $variables['excerpt'] = mb_substr(trim($clean), 0, 150);
 }
+
+/**
+ * Implements hook_preprocess_user().
+ */
+function drivepress_preprocess_user(&$variables) {
+  $account = $variables['user'];
+
+  $roles = array_filter($account->getRoles(), function ($role) {
+    return $role !== 'authenticated';
+  });
+
+  if (!empty($roles)) {
+    $roles = array_map(function ($role) {
+      return ucwords(str_replace('_', ' ', $role));
+    }, $roles);
+    $variables['profile_role_label'] = implode(', ', $roles);
+  }
+  else {
+    $variables['profile_role_label'] = t('Membre');
+  }
+
+  $variables['profile_member_since'] = \Drupal::service('date.formatter')
+    ->format($account->getCreatedTime(), 'custom', 'd/m/Y');
+
+  // Build "Mes articles" list for this profile page.
+  $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
+    ->accessCheck(TRUE)
+    ->condition('type', 'article')
+    ->condition('uid', $account->id())
+    ->sort('created', 'DESC')
+    ->range(0, 20);
+  $nids = $query->execute();
+
+  $variables['profile_articles'] = [];
+  if (!empty($nids)) {
+    $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids);
+    foreach ($nodes as $node) {
+      $variables['profile_articles'][] = [
+        'title' => $node->label(),
+        'url' => $node->toUrl()->toString(),
+        'created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'custom', 'd/m/Y'),
+      ];
+    }
+  }
+
+  if (isset($variables['content']['member_for']['#title'])) {
+    $variables['content']['member_for']['#title'] = t('Membre depuis');
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for user login.
+ */
+function drivepress_form_user_login_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $form['name']['#title'] = t('Nom d\'utilisateur');
+  $form['pass']['#title'] = t('Mot de passe');
+  $form['actions']['submit']['#value'] = t('Se connecter');
+}

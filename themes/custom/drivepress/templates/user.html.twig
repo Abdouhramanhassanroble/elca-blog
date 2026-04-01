@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Affichage profil utilisateur custom.
+ */
+#}
+<article class="user-profile-card">
+  <img src="/themes/custom/drivepress/css/assets/ELCA_Informatik_logo.svg" alt="{{ 'ELCA'|t }}" class="user-profile-card__logo">
+  <h1 class="user-profile-card__title">{{ 'Bienvenue'|t }} {{ user.getDisplayName }}</h1>
+  <p class="user-profile-card__line">
+    {{ 'Vous êtes'|t }} <strong>{{ profile_role_label }}</strong>.
+  </p>
+  <p class="user-profile-card__line">
+    {{ 'Vous êtes membre d’ELCA Blog depuis le'|t }} <strong>{{ profile_member_since }}</strong>.
+  </p>
+</article>
+
