@@ -4,10 +4,26 @@
     <h1 class="article-full__title">{{ label }}</h1>
     <div class="article-full__meta">
       Publié le {{ node.createdtime|date('d/m/Y') }}
+      · Par {{ node.getOwner().getDisplayName() }}
     </div>
   </header>
   <div class="article-full__body">
     {{ content.body }}
   </div>
+  {% if content.comment %}
+    <div class="article-full__comments">
+      {{ content.comment }}
+    </div>
+  {% endif %}
+  {% if logged_in %}
+    <div class="article-full__actions">
+      {% if (node.getOwnerId() == user.id and user.hasPermission('edit own article content')) or user.hasPermission('edit any article content') %}
+        <a href="{{ path('entity.node.edit_form', {'node': node.id()}) }}" class="article-full__action">Modifier</a>
+      {% endif %}
+      {% if (node.getOwnerId() == user.id and user.hasPermission('delete own article content')) or user.hasPermission('delete any article content') %}
+        <a href="{{ path('entity.node.delete_form', {'node': node.id()}) }}" class="article-full__action article-full__action--danger">Supprimer</a>
+      {% endif %}
+    </div>
+  {% endif %}
   <a href="/" class="article-full__back">← Retour aux articles</a>
 </article>

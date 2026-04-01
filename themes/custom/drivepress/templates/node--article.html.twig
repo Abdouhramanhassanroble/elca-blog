@@ -1,5 +1,6 @@
 <article class="article-card">
   <div class="article-card__body">
+    <div class="article-card__date">{{ node.createdtime|date('Y-m-d') }}</div>
     <div class="article-card__tag">Article</div>
     <h2 class="article-card__title">
       <a href="{{ url }}">{{ label }}</a>
@@ -7,6 +8,6 @@
     <div class="article-card__excerpt">
         {{ excerpt }}...
     </div>
-    <a href="{{ url }}" class="article-card__link">Lire la suite →</a>
+    <a href="{{ url }}" class="article-card__link">En savoir plus →</a>
   </div>
 </article>
